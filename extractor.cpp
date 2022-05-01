@@ -50,4 +50,53 @@ int Extractor::add_feaout(FeaBase* S) {
 
 	return 0;
 }
+
+int Extractor::extract_fea() {
+	this->set_hit_list_cache();
+	this->clear_cache();
+	if (this->fea_list.size() == 0) {
+		return 0;
+	}
+	int ret = 0;
+	for (size_t i = 0; i < this->fea_list.size(); i++) {
+		FeaBase* S = this->fea_list[i];
+		if (this->hit_list_cache && S->list_cache) {
+			continue;
+		}
+		S->fea_out.clear_val();
+		ret = S->gen_fea();
+		if (ret != 0) {
+			return S->slot;
+		}
+	}
+	this->fill_result();
+	return 0;
+}
+
+void Extractor::auto_slot() {
+	int64_t slot = 1;
+	for (size_t i = 0; i < this->fea_list.size(); i++) {
+		FeaBase* S = this->fea_list[i];
+		if (S->slot < 0) {
+			continue;
+		}
+		S->slot = slot;
+		slot += S->fea_out.length;
+	}
+}
+
+void Extractor::fill_result() {
+	this->fea_result.clear();
+	this->fea_res_length = 0;
+	for (size_t i = 0; i < this->fea_list.size(); i++) {
+		FeaBase* S = this->fea_list[i];
+		if (S->slot >= 0) {
+			if (!S->enable_str_out) {
+				this->add_feaout(S);
+			}
+		}
+	}
+}
+
+
 }
