@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
-#include <strategy_common/TTFea/fea_util.h>
+#include <strategy_common/TTFea/fea_utils.h>
 #include <strategy_common/TTFea/factory.h>
 #include <strategy_common/TTFea/extractor.h>
 #include <cplusutils/logutil/log_util.h>
